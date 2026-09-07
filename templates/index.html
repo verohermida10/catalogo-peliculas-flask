@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mi catálogo de películas</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #0f0f0f;
+            color: white;
+        }
+
+        /* NAVEGACIÓN */
+
+        nav {
+            width: 100%;
+            padding: 18px 5%;
+            background-color: #181818;
+            border-bottom: 1px solid #292929;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .inicio {
+            color: #bbbbbb;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.2s ease;
+        }
+
+        .inicio:hover {
+            color: white;
+        }
+
+        /* ENCABEZADO */
+
+        header {
+            text-align: center;
+            padding: 40px 20px 30px;
+        }
+
+        header h1 {
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #bbbbbb;
+            margin-top: 0;
+        }
+
+        /* PELÍCULA DESTACADA */
+
+        .destacada {
+            width: 90%;
+            max-width: 1100px;
+            margin: 10px auto 45px;
+
+            display: flex;
+            align-items: center;
+            gap: 35px;
+
+            background: linear-gradient(
+                135deg,
+                #252525,
+                #181818
+            );
+
+            border: 1px solid #303030;
+            border-radius: 15px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .destacada img {
+            width: 280px;
+            height: 390px;
+
+            object-fit: cover;
+
+            border-radius: 10px;
+
+            display: block;
+        }
+
+        .destacada-contenido {
+            flex: 1;
+        }
+
+        .destacada-etiqueta {
+            color: #bbbbbb;
+            font-size: 14px;
+
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+            margin-bottom: 10px;
+        }
+
+        .destacada h2 {
+            font-size: 36px;
+
+            margin: 0 0 12px;
+        }
+
+        .destacada-genero {
+            color: #bbbbbb;
+
+            font-size: 16px;
+
+            margin-bottom: 20px;
+        }
+
+        .destacada-sinopsis {
+            color: #cccccc;
+
+            font-size: 16px;
+
+            line-height: 1.7;
+
+            margin-bottom: 25px;
+        }
+
+        .boton {
+            display: inline-block;
+
+            padding: 12px 20px;
+
+            background-color: white;
+            color: #111111;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+            transition:
+                transform 0.2s ease,
+                background-color 0.2s ease;
+        }
+
+        .boton:hover {
+            background-color: #dddddd;
+
+            transform: translateY(-2px);
+        }
+
+        /* SECCIÓN DEL CATÁLOGO */
+
+        .titulo-catalogo {
+            width: 90%;
+            max-width: 1200px;
+
+            margin: 0 auto 20px;
+        }
+
+        .titulo-catalogo h2 {
+            font-size: 26px;
+
+            margin: 0;
+        }
+
+        /* BUSCADOR Y FILTRO */
+
+        .controles {
+            width: 90%;
+            max-width: 1000px;
+
+            margin: 0 auto 35px;
+
+            display: flex;
+
+            gap: 15px;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+        }
+
+        #buscador,
+        #filtroGenero {
+            padding: 12px 15px;
+
+            border: 1px solid #303030;
+
+            border-radius: 8px;
+
+            background-color: #1f1f1f;
+
+            color: white;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+        #buscador {
+            width: 300px;
+        }
+
+        #filtroGenero {
+            width: 200px;
+        }
+
+        #buscador:focus,
+        #filtroGenero:focus {
+            border-color: #555555;
+        }
+
+        /* CATÁLOGO */
+
+        .catalogo {
+            width: 90%;
+            max-width: 1200px;
+
+            margin: 0 auto 60px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fill, 220px);
+
+            gap: 28px;
+
+            justify-content: center;
+        }
+
+        /* TARJETAS */
+
+        .pelicula {
+            width: 220px;
+
+            background-color: #1f1f1f;
+
+            border: 1px solid #292929;
+
+            border-radius: 12px;
+
+            overflow: hidden;
+
+            text-decoration: none;
+
+            color: white;
+
+            display: block;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+        .pelicula:hover {
+            transform: translateY(-7px);
+
+            border-color: #444444;
+
+            box-shadow:
+                0 12px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .poster {
+            width: 220px;
+            height: 300px;
+
+            object-fit: cover;
+
+            display: block;
+        }
+
+        .contenido {
+            padding: 15px;
+        }
+
+        .contenido h2 {
+            font-size: 20px;
+
+            margin: 0 0 8px;
+        }
+
+        .genero {
+            color: #bbbbbb;
+
+            font-size: 14px;
+
+            margin-bottom: 12px;
+        }
+
+        .sinopsis {
+            color: #cccccc;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+            margin-bottom: 0;
+        }
+
+        /* MENSAJE SIN RESULTADOS */
+
+        #sinResultados {
+            display: none;
+
+            text-align: center;
+
+            color: #bbbbbb;
+
+            font-size: 18px;
+
+            margin: 40px;
+        }
+
+        /* PIE DE PÁGINA */
+
+        footer {
+            border-top: 1px solid #292929;
+
+            background-color: #181818;
+
+            text-align: center;
+
+            padding: 25px 20px;
+
+            color: #888888;
+
+            font-size: 14px;
+        }
+
+        /* CELULAR */
+
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 15px 5%;
+            }
+
+            .logo {
+                font-size: 17px;
+            }
+
+            .inicio {
+                font-size: 14px;
+            }
+
+            header {
+                padding-top: 30px;
+            }
+
+            .destacada {
+                flex-direction: column;
+
+                text-align: center;
+
+                padding: 20px;
+
+                gap: 20px;
+            }
+
+            .destacada img {
+                width: 220px;
+                height: 310px;
+            }
+
+            .destacada h2 {
+                font-size: 28px;
+            }
+
+            .destacada-sinopsis {
+                font-size: 15px;
+            }
+
+            .titulo-catalogo {
+                text-align: center;
+            }
+
+            #buscador,
+            #filtroGenero {
+                width: 100%;
+                max-width: 350px;
+            }
+
+            .catalogo {
+                grid-template-columns: 220px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVEGACIÓN -->
+
+    <nav>
+
+        <a
+            href="{{ url_for('inicio') }}"
+            class="logo"
+        >
+            🎬 Mi catálogo
+        </a>
+
+        <a
+            href="{{ url_for('inicio') }}"
+            class="inicio"
+        >
+            Inicio
+        </a>
+
+    </nav>
+
+
+    <!-- ENCABEZADO -->
+
+    <header>
+
+        <h1>
+            🎬 Mi catálogo de películas
+        </h1>
+
+        <p>
+            Un catálogo creado con Python y Flask.
+        </p>
+
+    </header>
+
+
+    <!-- PELÍCULA DESTACADA -->
+
+    <section class="destacada">
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename='imagenes/gonjiam poster.jpg'
+            ) }}"
+            alt="Gonjiam: Haunted Asylum"
+        >
+
+
+        <div class="destacada-contenido">
+
+            <div class="destacada-etiqueta">
+                🔥 Película destacada
+            </div>
+
+            <h2>
+                Gonjiam: Haunted Asylum
+            </h2>
+
+            <p class="destacada-genero">
+                🎭 Terror · 2018
+            </p>
+
+            <p class="destacada-sinopsis">
+                Un grupo de jóvenes entra en un antiguo hospital
+                psiquiátrico abandonado para transmitir su exploración
+                en directo.
+            </p>
+
+            <a
+                href="{{ url_for(
+                    'detalle_pelicula',
+                    titulo='Gonjiam: Haunted Asylum'
+                ) }}"
+                class="boton"
+            >
+                Ver tráiler
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- TÍTULO DEL CATÁLOGO -->
+
+    <div class="titulo-catalogo">
+
+        <h2>
+            🎞️ Todas las películas
+        </h2>
+
+    </div>
+
+
+    <!-- BUSCADOR Y FILTRO -->
+
+    <div class="controles">
+
+        <input
+            type="text"
+            id="buscador"
+            placeholder="🔎 Buscar película..."
+        >
+
+
+        <select id="filtroGenero">
+
+            <option value="todos">
+                Todos los géneros
+            </option>
+
+            <option value="Terror">
+                Terror
+            </option>
+
+            <option value="Drama">
+                Drama
+            </option>
+
+            <option value="Deportes">
+                Deportes
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- CATÁLOGO -->
+
+    <div
+        class="catalogo"
+        id="catalogo"
+    >
+
+
+        {% for pelicula in peliculas %}
+
+
+        <a
+            href="{{ url_for(
+                'detalle_pelicula',
+                titulo=pelicula['titulo']
+            ) }}"
+            class="pelicula"
+
+            data-titulo="{{ pelicula['titulo'] }}"
+
+            data-genero="{{ pelicula['genero'] }}"
+        >
+
+            <img
+                class="poster"
+
+                src="{{ url_for(
+                    'static',
+                    filename=pelicula['imagen']
+                ) }}"
+
+                alt="{{ pelicula['titulo'] }}"
+            >
+
+
+            <div class="contenido">
+
+                <h2>
+                    {{ pelicula['titulo'] }}
+                </h2>
+
+                <p class="genero">
+                    🎭 {{ pelicula['genero'] }}
+                    · {{ pelicula['año'] }}
+                </p>
+
+                <p class="sinopsis">
+                    {{ pelicula['sinopsis'] }}
+                </p>
+
+            </div>
+
+        </a>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+    <!-- MENSAJE SI NO HAY RESULTADOS -->
+
+    <div id="sinResultados">
+
+        No se encontraron películas.
+
+    </div>
+
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer>
+
+        🎬 Mi catálogo de películas ·
+        Proyecto desarrollado con Python y Flask
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        const buscador =
+            document.getElementById("buscador");
+
+        const filtroGenero =
+            document.getElementById("filtroGenero");
+
+        const peliculas =
+            document.querySelectorAll(".pelicula");
+
+        const sinResultados =
+            document.getElementById("sinResultados");
+
+
+        function filtrarPeliculas() {
+
+            const texto =
+                buscador.value.toLowerCase();
+
+            const generoSeleccionado =
+                filtroGenero.value;
+
+            let cantidadVisibles = 0;
+
+
+            peliculas.forEach(function(pelicula) {
+
+                const titulo =
+                    pelicula.dataset.titulo.toLowerCase();
+
+                const genero =
+                    pelicula.dataset.genero;
+
+
+                const coincideTitulo =
+                    titulo.includes(texto);
+
+
+                const coincideGenero =
+                    generoSeleccionado === "todos" ||
+                    genero === generoSeleccionado;
+
+
+                if (
+                    coincideTitulo &&
+                    coincideGenero
+                ) {
+
+                    pelicula.style.display =
+                        "block";
+
+                    cantidadVisibles++;
+
+                } else {
+
+                    pelicula.style.display =
+                        "none";
+
+                }
+
+            });
+
+
+            if (cantidadVisibles === 0) {
+
+                sinResultados.style.display =
+                    "block";
+
+            } else {
+
+                sinResultados.style.display =
+                    "none";
+
+            }
+
+        }
+
+
+        buscador.addEventListener(
+            "input",
+            filtrarPeliculas
+        );
+
+
+        filtroGenero.addEventListener(
+            "change",
+            filtrarPeliculas
+        );
+
+    </script>
+
+
+</body>
+
+</html>
